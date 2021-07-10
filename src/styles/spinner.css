@@ -1,0 +1,4 @@
+.spinner img {
+  max-width: 100%;
+  animation: spin 2s forwards infinite linear; 
+}

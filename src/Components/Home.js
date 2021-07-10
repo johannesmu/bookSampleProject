@@ -1,36 +1,40 @@
 import { useState, useEffect } from "react";
-import axios  from "axios";
+import { Spinner } from './Spinner'
+import { BookCard } from "./BookCard";
+
 export function Home ( props ) {
   const [ data, setData ] = useState()
-  const dataURL = "http://johannes.oa4.info/php/book.php";
 
   useEffect( () => {
     if( !data ) {
-      axios.get(dataURL).then(
-        (response) => {
-          setData( response.data )
-        }
-      )
+      setData( props.data )
     }
   })
 
   if( !data ) {
     return(
-      <div className="home">
-        <h2>Getting data ...</h2>
+      <div className="home" style={{display:'grid',placeItems:'center',minHeight:'100%'}}>
+        <Spinner width={36} />
       </div>
     )
   }
   else {
+    console.log( data )
     const Books = data.books.map( (item) => {
       return(
-        <h3>{item.book_title}</h3>
+        <BookCard 
+        title={item.book_title} 
+        image={item.cover_image}
+        tagline={item.tagline}
+        />
       )
     })
     return(
       <div className="home">
         <h2>Books</h2>
+        <div className="row">
         { Books }
+        </div>
       </div>
     )
   }

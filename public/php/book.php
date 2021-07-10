@@ -1,19 +1,5 @@
 <?php
 
-
-$http_origin = $_SERVER['HTTP_ORIGIN'];
-
-$allowed_domains = array(
-  'http://localhost:3000',
-  'http://localhost',
-);
-
-if (in_array($http_origin, $allowed_domains))
-{  
-    // header("Access-Control-Allow-Origin: $http_origin");
-    // header('Content-Type: application/json');
-}
-
 require('vendor/autoload.php');
 
 use bookstore\Books;
