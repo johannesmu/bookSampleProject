@@ -27,6 +27,7 @@ export function Home ( props ) {
         image={item.cover_image}
         tagline={item.tagline}
         />
+        
       )
     })
     return(
