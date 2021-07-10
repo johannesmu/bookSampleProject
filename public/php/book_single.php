@@ -15,6 +15,7 @@ if( $_SERVER['REQUEST_METHOD'] == 'GET' ) {
   header("Access-Control-Allow-Origin: *");
   header("Content-Type: application/json");
   echo json_encode( $response );
+  //output book
 }
 
 
