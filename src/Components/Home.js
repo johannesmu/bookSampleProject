@@ -1,16 +1,20 @@
 import { useState, useEffect } from "react";
-import axios  from "axios";
+//import axios  from "axios";
 export function Home ( props ) {
   const [ data, setData ] = useState()
   const dataURL = "http://johannes.oa4.info/php/book.php";
 
   useEffect( () => {
     if( !data ) {
-      axios.get(dataURL).then(
-        (response) => {
-          setData( response.data )
-        }
-      )
+      // axios.get(dataURL).then(
+      //   (response) => {
+      //     setData( response.data )
+      //   }
+      // )
+      fetch( dataURL )
+      .then((response) => response.json())
+      .then((responseData) => setData(responseData) )
+      .catch((error) => console.log(error))
     }
   })
 
