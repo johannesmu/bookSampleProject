@@ -7,6 +7,7 @@ import 'firebase/firestore';
 
 import {Home} from './Home';
 import {About} from './About';
+import {Register} from './Register';
 
 export function Content( props ) {
 
@@ -22,6 +23,9 @@ export function Content( props ) {
         </Route>
         <Route path="/about">
           <About />
+        </Route>
+        <Route path="/register">
+          <Register />
         </Route>
       </Switch>
     </div>
