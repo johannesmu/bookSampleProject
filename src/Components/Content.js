@@ -15,6 +15,18 @@ export function Content( props ) {
     firebase.initializeApp( firebaseConfig);
   }
 
+  const registerUser = (email,password) => {
+    firebase.auth().createUserWithEmailAndPassword( email, password )
+    .then( ( user ) => {
+      // do something with the user object
+      console.log( user.uid )
+    })
+    .catch( (error) => {
+      // do something with the error
+      console.log( error )
+    })
+  }
+
   return(
     <div className="container">
       <Switch>
@@ -25,7 +37,7 @@ export function Content( props ) {
           <About />
         </Route>
         <Route path="/register">
-          <Register />
+          <Register handler={ registerUser }/>
         </Route>
       </Switch>
     </div>
