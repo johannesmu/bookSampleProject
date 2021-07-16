@@ -7,6 +7,7 @@ import {Footer} from './Components/Footer';
 const Nav = [
   {name: "Home", link: "/"},
   {name: "About", link: "/about"},
+  {name: "Register", link: "/register"},
 ]
 
 function App() {
