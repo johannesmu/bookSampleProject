@@ -7,13 +7,15 @@ export function Login ( props ) {
   }
 
   return(
-    <form id="login" onSubmit={ submitHandler }>
-      <h4>Sign in to your account</h4>
-      <label className="form-label" htmlFor="email">Email</label>
-      <input className="form-control" type="email" name="email" id="email" />
-      <label className="form-label" htmlFor="password">Password</label>
-      <input className="form-control" type="password" name="password" id="password" />
-      <button type="submit" className="btn btn-primary">Login</button>
-    </form>
+    <div className="row mt-4">
+      <form className="col-md-4 offset-md-4" id="login" onSubmit={ submitHandler }>
+        <h4>Sign in to your account</h4>
+        <label className="form-label" htmlFor="email">Email</label>
+        <input className="form-control" type="email" name="email" id="email" />
+        <label className="form-label" htmlFor="password">Password</label>
+        <input className="form-control" type="password" name="password" id="password" />
+        <button type="submit" className="btn btn-primary">Login</button>
+      </form>
+    </div>
   )
 }
