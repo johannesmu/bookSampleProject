@@ -21,6 +21,16 @@ export function Content( props ) {
     firebase.initializeApp( firebaseConfig);
   }
 
+  const db = firebase.firestore()
+
+  const addData = ( data ) => {
+    return new Promise( ( resolve,reject) => {
+      db.collection('books').add( data )
+      .then( () => resolve( true ) )
+      .catch( (error) => reject(error) )
+    })
+  }
+
   const registerUser = (email,password) => {
     firebase.auth().createUserWithEmailAndPassword( email, password )
     .then( ( userCredential ) => {
@@ -78,7 +88,7 @@ export function Content( props ) {
           <Logout handler={ logoutUser }/>
         </Route>
         <Route path="/add">
-          <AddData />
+          <AddData handler={addData}/>
         </Route>
       </Switch>
     </div>
