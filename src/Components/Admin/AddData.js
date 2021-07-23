@@ -1,6 +1,7 @@
 export function AddData(props) {
   return (
     <form id="add-data">
+      <h2>Add a book</h2>
       <label htmlFor="title">Book Title</label>
       <input type="text" className="form-control" name="title" placeholder="Book title" id="title" />
       <label htmlFor="tagline">Tag Line</label>
