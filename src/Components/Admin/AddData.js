@@ -1,6 +1,18 @@
 export function AddData(props) {
+  const submitHandler = (event) => {
+    event.preventDefault()
+    const formData = new FormData(event.target)
+    const obj = new Object()
+    formData.forEach( (value,key) => {
+      obj[key] = value
+    })
+    props.handler( obj )
+    .then( (response) => console.log('success'))
+    .catch( (error) => console.log(error) )
+  }
+
   return (
-    <form id="add-data">
+    <form id="add-data" onSubmit={submitHandler}>
       <h2>Add a book</h2>
       <label htmlFor="title">Book Title</label>
       <input type="text" className="form-control" name="title" placeholder="Book title" id="title" />
