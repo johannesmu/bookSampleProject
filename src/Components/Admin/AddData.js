@@ -3,12 +3,27 @@ export function AddData(props) {
     event.preventDefault()
     const formData = new FormData(event.target)
     const obj = new Object()
-    formData.forEach( (value,key) => {
+    formData.forEach((value, key) => {
       obj[key] = value
     })
-    props.handler( obj )
-    .then( (response) => console.log('success'))
-    .catch( (error) => console.log(error) )
+    // upload image to get the url
+    if (obj.cover_image) {
+      const string = Math.random().toString(36).substr(2, 5)
+      const name = obj.cover_image.name
+      const title = obj.title
+      const path = 'books/' + string + title + name
+      props.imageHandler(path, obj.cover_image)
+        .then((url) => {
+          obj.cover_image = url
+          props.handler(obj)
+            .then((response) => console.log('success'))
+            .catch((error) => console.log(error))
+        })
+        .catch((error) => console.log(error))
+    }
+    else {
+      console.log('need image')
+    }
   }
 
   return (
@@ -18,7 +33,7 @@ export function AddData(props) {
       <input type="text" className="form-control" name="title" placeholder="Book title" id="title" />
       <label htmlFor="tagline">Tag Line</label>
       <input type="text" className="form-control" name="tagline" placeholder="Book tag line" id="tagline" />
-      
+
       <div className="row">
         <div className="col-md-6">
           <label htmlFor="isbn13">ISBN 13</label>
@@ -29,7 +44,7 @@ export function AddData(props) {
           <input type="text" className="form-control" name="isbn10" placeholder="ISBN 10" id="isbn10" />
         </div>
       </div>
-      
+
       <label htmlFor="author">Author</label>
       <input type="text" className="form-control" name="author" placeholder="Book author" id="author" />
       <label htmlFor="publisher">Publisher</label>
@@ -39,7 +54,7 @@ export function AddData(props) {
       <label htmlFor="pages">Pages</label>
       <input type="number" className="form-control" name="pages" placeholder="Pages" id="pages" />
       <label htmlFor="cover_image">Image</label>
-      <input type="text" className="form-control" name="cover_image" placeholder="Cover image" id="cover_image" />
+      <input type="file" className="form-control" name="cover_image" placeholder="Cover image" id="cover_image" />
       <div className="mt-3 buttons d-flex flex-row justify-content-between">
         <button type="reset" className="btn btn-secondary">Reset</button>
         <button type="submit" className="btn btn-primary">Add Book</button>
