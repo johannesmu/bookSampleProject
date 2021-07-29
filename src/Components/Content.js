@@ -1,23 +1,74 @@
 import { Switch, Route } from 'react-router-dom';
+import { firebaseConfig } from '../Config/Config';
+import firebase  from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/storage';
+import 'firebase/firestore';
+import { useState } from 'react';
 
 import {Home} from './Home';
 import {About} from './About';
-import {Book} from './Book'
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import {Register} from './Register';
+import {Login} from './Login';
+import {Logout} from './Logout';
+import { AddData } from './Admin/AddData';
 
 export function Content( props ) {
-  const [bookData,setBookData] = useState()
-  const dataURL = "http://johannes.oa4.info/php/book.php";
+  const [auth,setAuth] = useState( false )
+  const [user,setUser] = useState()
 
-  useEffect( () => {
-    if(!bookData) {
-      axios.get( dataURL )
-      .then( (response) => {
-        setBookData( response.data )
-      })
-    }
-  })
+  if(!firebase.apps.length){
+    firebase.initializeApp( firebaseConfig);
+  }
+
+  const db = firebase.firestore()
+
+  const addData = ( data ) => {
+    return new Promise( ( resolve,reject) => {
+      db.collection('books').add( data )
+      .then( () => resolve( true ) )
+      .catch( (error) => reject(error) )
+    })
+  }
+
+  const registerUser = (email,password) => {
+    firebase.auth().createUserWithEmailAndPassword( email, password )
+    .then( ( userCredential ) => {
+      // do something with the user object
+      //console.log( userCredential.user.uid )
+      setUser( userCredential.user )
+      setAuth( true )
+      props.authHandler( true )
+    })
+    .catch( (error) => {
+      // do something with the error
+      console.log( error )
+    })
+  }
+
+  const loginUser = (email,password) => {
+    firebase.auth().signInWithEmailAndPassword( email, password )
+    .then( (userCredential) => {
+      setUser( userCredential.user )
+      setAuth( true )
+      props.authHandler( true )
+    })
+    .catch( (error) => {
+      // do something with the error
+      console.log( error )
+    })
+  }
+
+  const logoutUser = () => {
+    firebase.auth().signOut()
+    .then( () => {
+      // do something after signout
+      setUser( null )
+      setAuth( false )
+      props.authHandler( false )
+    })
+  }
+
   return(
     <div className="container">
       <Switch>
@@ -29,6 +80,18 @@ export function Content( props ) {
         </Route>
         <Route path="/about">
           <About />
+        </Route>
+        <Route path="/register">
+          <Register handler={ registerUser }/>
+        </Route>
+        <Route path="/login">
+          <Login handler={ loginUser }/>
+        </Route>
+        <Route path="/logout">
+          <Logout handler={ logoutUser }/>
+        </Route>
+        <Route path="/add">
+          <AddData handler={addData}/>
         </Route>
       </Switch>
     </div>

@@ -1,13 +1,19 @@
 import { useState, useEffect } from "react";
-import { Spinner } from './Spinner'
-import { BookCard } from "./BookCard";
-
+//import axios  from "axios";
 export function Home ( props ) {
   const [ data, setData ] = useState()
 
   useEffect( () => {
     if( !data ) {
-      setData( props.data )
+      // axios.get(dataURL).then(
+      //   (response) => {
+      //     setData( response.data )
+      //   }
+      // )
+      fetch( dataURL )
+      .then((response) => response.json())
+      .then((responseData) => setData(responseData) )
+      .catch((error) => console.log(error))
     }
   })
 
