@@ -1,14 +1,58 @@
+import { fromBits } from 'long'
+import { useState } from 'react'
+
 export function AddData(props) {
+  const [authorCount, setAuthorCount] = useState(1)
+
   const submitHandler = (event) => {
     event.preventDefault()
     const formData = new FormData(event.target)
     const obj = new Object()
-    formData.forEach( (value,key) => {
+    formData.forEach((value, key) => {
       obj[key] = value
     })
-    props.handler( obj )
-    .then( (response) => console.log('success'))
-    .catch( (error) => console.log(error) )
+    console.log(obj)
+    // props.handler(obj)
+    //   .then((response) => console.log('success'))
+    //   .catch((error) => console.log(error))
+  }
+
+  const Authors = (props) => {
+    // generate an array from the number of authors
+    let inputCount = []
+    for (let i = 0; i < props.count; i++) {
+      inputCount.push(i)
+    }
+    const Inputs = inputCount.map((number) => {
+      return (
+        <div>
+          <label htmlFor={"author" + number}>{(authorCount > 1) ? "Author " + (number + 1) : "Author"}</label>
+          <div className="input-group">
+          <input 
+            type="text" 
+            className="form-control" 
+            name="authors[]" 
+            placeholder="Book author" 
+            id={"author" + number} 
+          />
+          <button 
+            class="btn btn-outline-secondary" 
+            type="button" 
+            id={"author" + number + "button"}
+            style={{ display: (number === 0) ? "none" : "block"}}
+            onClick={ () => setAuthorCount(authorCount - 1) }
+          >
+            Remove
+          </button>
+          </div>
+        </div>
+      )
+    })
+    return (
+      <div className="authors">
+        {Inputs}
+      </div>
+    )
   }
 
   return (
@@ -18,7 +62,7 @@ export function AddData(props) {
       <input type="text" className="form-control" name="title" placeholder="Book title" id="title" />
       <label htmlFor="tagline">Tag Line</label>
       <input type="text" className="form-control" name="tagline" placeholder="Book tag line" id="tagline" />
-      
+
       <div className="row">
         <div className="col-md-6">
           <label htmlFor="isbn13">ISBN 13</label>
@@ -29,11 +73,19 @@ export function AddData(props) {
           <input type="text" className="form-control" name="isbn10" placeholder="ISBN 10" id="isbn10" />
         </div>
       </div>
-      
-      <label htmlFor="author">Author</label>
-      <input type="text" className="form-control" name="author" placeholder="Book author" id="author" />
-      <label htmlFor="publisher">Publisher</label>
-      <input type="text" className="form-control" name="publisher" placeholder="Book publisher" id="publisher" />
+      <div className="row">
+        <div className="col-md-6">
+          <Authors count={authorCount} />
+          <button className="btn btn-outline-primary my-2" type="button" onClick={() => setAuthorCount(authorCount + 1)}>
+            <i className="plus-circle"></i>Add another author
+          </button>
+        </div>
+        <div className="col-md-6">
+          <label htmlFor="publisher">Publisher</label>
+          <input type="text" className="form-control" name="publisher" placeholder="Book publisher" id="publisher" />
+        </div>
+      </div>
+
       <label htmlFor="year">Year</label>
       <input type="number" className="form-control" name="year" placeholder="Year published" id="year" />
       <label htmlFor="pages">Pages</label>

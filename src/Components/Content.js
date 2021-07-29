@@ -11,22 +11,43 @@ import {About} from './About';
 import {Register} from './Register';
 import {Login} from './Login';
 import {Logout} from './Logout';
+import {Book} from './Book';
 import { AddData } from './Admin/AddData';
 
 export function Content( props ) {
   const [auth,setAuth] = useState( false )
   const [user,setUser] = useState()
+  const [data,setData] = useState()
 
   if(!firebase.apps.length){
     firebase.initializeApp( firebaseConfig);
   }
-
+  // reference to database
   const db = firebase.firestore()
+  
 
   const addData = ( data ) => {
     return new Promise( ( resolve,reject) => {
       db.collection('books').add( data )
       .then( () => resolve( true ) )
+      .catch( (error) => reject(error) )
+    })
+  }
+
+  // reference to storage
+  const storage = firebase.storage()
+
+  const uploadImage = ( path, image ) => {
+    return new Promise( (resolve,reject) => {
+      storage.ref(path).put(image)
+      .then( ( response ) => {
+        //get the URL of the file
+        storage.ref(path).child(image).getDownloadURL()
+        .then((url) => {
+          resolve( url )
+        })
+        .catch((error) => reject(error) )
+      })
       .catch( (error) => reject(error) )
     })
   }
@@ -73,7 +94,7 @@ export function Content( props ) {
     <div className="container">
       <Switch>
         <Route exact path="/">
-          <Home data={bookData}/>
+          <Home data={data}/>
         </Route>
         <Route path="/book/:bookId">
           <Book />
