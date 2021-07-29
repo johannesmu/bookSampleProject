@@ -1,5 +1,5 @@
 import { Switch, Route } from 'react-router-dom';
-import { firebaseConfig } from '../Config/Config';
+import { firebaseConfig } from '../config/Config';
 import firebase  from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/storage';
