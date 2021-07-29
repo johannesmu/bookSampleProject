@@ -24,6 +24,10 @@ export function Content( props ) {
   }
   // reference to database
   const db = firebase.firestore()
+
+  const getData = ( coll ) => {
+    db.collection( coll ).get()
+  }
   
 
   const addData = ( data ) => {
@@ -42,7 +46,7 @@ export function Content( props ) {
       storage.ref(path).put(image)
       .then( ( response ) => {
         //get the URL of the file
-        storage.ref(path).child(image).getDownloadURL()
+        storage.ref(path).getDownloadURL()
         .then((url) => {
           resolve( url )
         })
@@ -112,7 +116,7 @@ export function Content( props ) {
           <Logout handler={ logoutUser }/>
         </Route>
         <Route path="/add">
-          <AddData handler={addData}/>
+          <AddData handler={addData} imgHandler={uploadImage}/>
         </Route>
       </Switch>
     </div>
