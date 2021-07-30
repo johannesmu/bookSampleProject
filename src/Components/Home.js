@@ -2,21 +2,11 @@ import { useState, useEffect } from "react";
 //import axios  from "axios";
 export function Home ( props ) {
   const [ data, setData ] = useState()
-  const dataURL = "http://johannes.oa4.info/php/book.php";
-
+ 
   useEffect( () => {
-    if( !data ) {
-      // axios.get(dataURL).then(
-      //   (response) => {
-      //     setData( response.data )
-      //   }
-      // )
-      fetch( dataURL )
-      .then((response) => response.json())
-      .then((responseData) => setData(responseData) )
-      .catch((error) => console.log(error))
-    }
-  })
+    setData( props.data )
+  }, [props.data] )
+  
 
   if( !data ) {
     return(
@@ -26,9 +16,9 @@ export function Home ( props ) {
     )
   }
   else {
-    const Books = data.books.map( (item) => {
+    const Books = data.map( (item) => {
       return(
-        <h3>{item.book_title}</h3>
+        <h3>{item.title}</h3>
       )
     })
     return(

@@ -27,11 +27,10 @@ export function Content( props ) {
       readData()
       .then( ( data ) => {
         setBookData( data )
-        console.log( data )
       })
       .catch( (error) => console.log(error) )
     }
-  })
+  }, [bookData])
 
   const db = firebase.firestore()
 
@@ -115,7 +114,7 @@ export function Content( props ) {
     <div className="container">
       <Switch>
         <Route exact path="/">
-          <Home />
+          <Home data={bookData} />
         </Route>
         <Route path="/about">
           <About />
