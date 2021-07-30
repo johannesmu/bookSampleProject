@@ -18,13 +18,28 @@ export function Home ( props ) {
   else {
     const Books = data.map( (item) => {
       return(
-        <h3>{item.title}</h3>
+        <div className="col-md-3">
+          <div className="card">
+            <img 
+            src={item.cover_image} 
+            className="card-img-top" 
+            alt={item.title} 
+            style={{width: '100%', height: '300px', objectFit: 'cover', objectPosition: 'center'}}
+            />
+            <div className="card-body">
+              <h5 className="card-title">{item.title}</h5>
+              <p style={{minHeight: '10ch'}}>{item.tagline}</p>
+            </div>
+          </div>
+        </div>
       )
     })
     return(
       <div className="home">
         <h2>Books</h2>
+        <div className="row">
         { Books }
+        </div>
       </div>
     )
   }
