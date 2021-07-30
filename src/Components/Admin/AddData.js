@@ -1,7 +1,13 @@
+import { useState } from 'react'
+
 export function AddData(props) {
+  const [message,setMessage] = useState()
+  const [error,setError] = useState( false )
+
   const submitHandler = (event) => {
     event.preventDefault()
     const formData = new FormData(event.target)
+    event.target.reset()
     const obj = new Object()
     formData.forEach((value, key) => {
       obj[key] = value
@@ -11,19 +17,35 @@ export function AddData(props) {
       const string = Math.random().toString(36).substr(2, 5)
       const name = obj.cover_image.name
       const title = obj.title
+      // const title = obj.title.split(' ').join('')
       const path = 'books/' + string + title + name
       props.imageHandler(path, obj.cover_image)
         .then((url) => {
           obj.cover_image = url
           props.handler(obj)
-            .then((response) => console.log('success'))
-            .catch((error) => console.log(error))
+            .then((response) => {
+              setMessage('The book has been added!')
+              setError( false)
+            } )
+            .catch((error) => {
+              setMessage('There has been an error!')
+              setError(true)
+            })
         })
         .catch((error) => console.log(error))
     }
     else {
       console.log('need image')
     }
+  }
+
+  const Feedback = ( props ) => {
+    setTimeout( () => {}, props.duration )
+    return(
+      <div className="alert">
+        {props.content}
+      </div>
+    )
   }
 
   return (
