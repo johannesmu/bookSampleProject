@@ -40,9 +40,13 @@ export function AddData(props) {
   }
 
   const Feedback = ( props ) => {
-    setTimeout( () => {}, props.duration )
+    setTimeout( () => {
+      setMessage(null)
+      setError(false)
+    }, props.duration )
     return(
-      <div className="alert">
+      <div className={ (error) ? "alert alert-danger" : "alert alert-success" }
+      style={{ display: (message) ? "block" : "none" }}>
         {props.content}
       </div>
     )
@@ -81,6 +85,7 @@ export function AddData(props) {
         <button type="reset" className="btn btn-secondary">Reset</button>
         <button type="submit" className="btn btn-primary">Add Book</button>
       </div>
+      <Feedback duration={3000} content={message} />
     </form>
   )
 }
