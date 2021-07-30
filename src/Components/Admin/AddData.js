@@ -1,51 +1,52 @@
-
 import { useState } from 'react'
 
 export function AddData(props) {
-  const [ message, setMessage] = useState()
+  const [message,setMessage] = useState()
+  const [error,setError] = useState( false )
 
   const submitHandler = (event) => {
     event.preventDefault()
     const formData = new FormData(event.target)
+    event.target.reset()
     const obj = new Object()
     formData.forEach((value, key) => {
       obj[key] = value
     })
-    // check author includes comma
-    if( obj.author.includes(',')) {
-      const items = obj.author.split(',')
-      // remove the spaces at the beginning and end of each name
-      const authors = items.map( (author) => {
-        return author.trim()
-      })
-      obj.author = authors
+    // upload image to get the url
+    if (obj.cover_image) {
+      const string = Math.random().toString(36).substr(2, 5)
+      const name = obj.cover_image.name
+      const title = obj.title
+      // const title = obj.title.split(' ').join('')
+      const path = 'books/' + string + title + name
+      props.imageHandler(path, obj.cover_image)
+        .then((url) => {
+          obj.cover_image = url
+          props.handler(obj)
+            .then((response) => {
+              setMessage('The book has been added!')
+              setError( false)
+            } )
+            .catch((error) => {
+              setMessage('There has been an error!')
+              setError(true)
+            })
+        })
+        .catch((error) => console.log(error))
     }
     else {
-      const authors = Array( obj.author)
-      obj.author = authors
+      console.log('need image')
     }
-    // upload the image
-    // get image object from formdata
-    const img = formData.get('cover_image')
-    const title = formData.get('title')
-    const string = Math.random().toString(36).substr(2, 5)
-    const path = `books/${string}${img.name}`
-    props.imgHandler(path,img)
-    .then( (imgURL) => {
-      // res is the url of the image, now we can add it to object
-      obj.cover_image = imgURL
-      // now we add the obj to the database
-      props.handler( obj )
-      .then( (response) => setMessage('Book added!'))
-      .catch( (error) => console.log(error))
-    } )
-    .catch( (err) => console.log(err))
   }
 
-  const Message = ( props ) => {
-    setTimeout( () => setMessage(null), 3000 )
-    return (
-      <div className="alert" style={{display: (props.content) ? "block" : "none"}}>
+  const Feedback = ( props ) => {
+    setTimeout( () => {
+      setMessage(null)
+      setError(false)
+    }, props.duration )
+    return(
+      <div className={ (error) ? "alert alert-danger" : "alert alert-success" }
+      style={{ display: (message) ? "block" : "none" }}>
         {props.content}
       </div>
     )
@@ -69,17 +70,11 @@ export function AddData(props) {
           <input type="text" className="form-control" name="isbn10" placeholder="ISBN 10" id="isbn10" />
         </div>
       </div>
-      <div className="row">
-        <div className="col-md-6">
-          <label htmlFor="author">Author (if more than one, separate by a comma)</label>
-          <input type="text" className="form-control" name="author" placeholder="author1,author2" id="author" />
-        </div>
-        <div className="col-md-6">
-          <label htmlFor="publisher">Publisher</label>
-          <input type="text" className="form-control" name="publisher" placeholder="Book publisher" id="publisher" />
-        </div>
-      </div>
 
+      <label htmlFor="author">Author(s)</label>
+      <input type="text" className="form-control" name="author" placeholder="Separate multiple authors with comma" id="author" />
+      <label htmlFor="publisher">Publisher</label>
+      <input type="text" className="form-control" name="publisher" placeholder="Book publisher" id="publisher" />
       <label htmlFor="year">Year</label>
       <input type="number" className="form-control" name="year" placeholder="Year published" id="year" />
       <label htmlFor="pages">Pages</label>
@@ -87,12 +82,13 @@ export function AddData(props) {
 
       <label htmlFor="cover_image">Image</label>
       <input type="file" className="form-control" name="cover_image" placeholder="Cover image" id="cover_image" />
-
       <div className="mt-3 buttons d-flex flex-row justify-content-between">
         <button type="reset" className="btn btn-secondary">Reset</button>
         <button type="submit" className="btn btn-primary">Add Book</button>
       </div>
-      <Message content={message} />
+      <div className="my-2">
+        <Feedback duration={3000} content={message} />
+      </div>
     </form>
   )
 }

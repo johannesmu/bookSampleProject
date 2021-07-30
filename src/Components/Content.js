@@ -4,7 +4,7 @@ import firebase  from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/storage';
 import 'firebase/firestore';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import {Home} from './Home';
 import {About} from './About';
@@ -17,18 +17,25 @@ import { AddData } from './Admin/AddData';
 export function Content( props ) {
   const [auth,setAuth] = useState( false )
   const [user,setUser] = useState()
-  const [data,setData] = useState()
+  const [ bookData, setBookData ] = useState()
 
   if(!firebase.apps.length){
     firebase.initializeApp( firebaseConfig);
   }
-  // reference to database
+
+  useEffect( () => {
+    if( !bookData ) {
+      readData()
+      .then( ( data ) => {
+        console.log(data)
+        setBookData( data )
+      })
+      .catch( (error) => console.log(error) )
+    }
+  }, [bookData])
+
   const db = firebase.firestore()
 
-  const getData = ( coll ) => {
-    db.collection( coll ).get()
-  }
-  
 
   const addData = ( data ) => {
     return new Promise( ( resolve,reject) => {
@@ -38,21 +45,32 @@ export function Content( props ) {
     })
   }
 
-  // reference to storage
+  const readData = () => {
+    return new Promise( (resolve,reject) => {
+      db.collection('books').onSnapshot( (querySnapshot) => {
+        let books = []
+        querySnapshot.forEach( (doc) => {
+          let book = doc.data()
+          book.id = doc.id
+          books.push( book )
+        })
+        resolve( books )
+      })
+    })
+  }
+
   const storage = firebase.storage()
 
-  const uploadImage = ( path, image ) => {
+  // example path 'books/covers/image1.jpg'
+  const addImage = ( path, image ) => {
     return new Promise( (resolve,reject) => {
-      storage.ref(path).put(image)
-      .then( ( response ) => {
-        //get the URL of the file
-        storage.ref(path).getDownloadURL()
-        .then((url) => {
-          resolve( url )
-        })
-        .catch((error) => reject(error) )
+      storage.ref( path ).put(image)
+      .then(() => {
+        storage.ref( path ).getDownloadURL()
+        .then(( url ) => resolve(url) )
+        .catch((errors) => reject(errors) )
       })
-      .catch( (error) => reject(error) )
+      .catch( (errors) => reject(errors) )
     })
   }
 
@@ -98,10 +116,7 @@ export function Content( props ) {
     <div className="container">
       <Switch>
         <Route exact path="/">
-          <Home data={data}/>
-        </Route>
-        <Route path="/book/:bookId">
-          <Book />
+          <Home data={bookData} />
         </Route>
         <Route path="/about">
           <About />
@@ -116,7 +131,7 @@ export function Content( props ) {
           <Logout handler={ logoutUser }/>
         </Route>
         <Route path="/add">
-          <AddData handler={addData} imgHandler={uploadImage}/>
+          <AddData handler={addData} imageHandler={addImage}/>
         </Route>
       </Switch>
     </div>
