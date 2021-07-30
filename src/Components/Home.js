@@ -16,19 +16,20 @@ export function Home ( props ) {
     )
   }
   else {
-    const Books = data.map( (item) => {
+    const Books = data.map( (item, key) => {
       return(
-        <div className="col-md-3">
+        <div className="col-md-3 my-2" key={key}>
           <div className="card">
             <img 
             src={item.cover_image} 
-            className="card-img-top" 
+            className="card-img-top border border-primary" 
             alt={item.title} 
             style={{width: '100%', height: '300px', objectFit: 'cover', objectPosition: 'center'}}
             />
             <div className="card-body">
               <h5 className="card-title">{item.title}</h5>
-              <p style={{minHeight: '10ch'}}>{item.tagline}</p>
+              <p style={{minHeight: '5ch'}}>{item.tagline}</p>
+              <p>by {item.author}</p>
             </div>
           </div>
         </div>

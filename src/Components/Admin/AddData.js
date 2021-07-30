@@ -71,8 +71,8 @@ export function AddData(props) {
         </div>
       </div>
 
-      <label htmlFor="author">Author</label>
-      <input type="text" className="form-control" name="author" placeholder="Book author" id="author" />
+      <label htmlFor="author">Author(s)</label>
+      <input type="text" className="form-control" name="author" placeholder="Separate multiple authors with comma" id="author" />
       <label htmlFor="publisher">Publisher</label>
       <input type="text" className="form-control" name="publisher" placeholder="Book publisher" id="publisher" />
       <label htmlFor="year">Year</label>
@@ -85,7 +85,9 @@ export function AddData(props) {
         <button type="reset" className="btn btn-secondary">Reset</button>
         <button type="submit" className="btn btn-primary">Add Book</button>
       </div>
-      <Feedback duration={3000} content={message} />
+      <div className="my-2">
+        <Feedback duration={3000} content={message} />
+      </div>
     </form>
   )
 }
