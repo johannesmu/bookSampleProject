@@ -23,10 +23,14 @@ const AuthNav = [
 function App() {
   const [auth,setAuth] = useState( false )
 
+  const changeAuth = (authValue) => {
+    setAuth( (authValue) ? true : false )
+  }
+
   return (
     <div className="App">
       <Header name="Heart Books" navigation={ (auth) ? AuthNav : Nav } />
-      <Content authHandler = {setAuth}/>
+      <Content authHandler = {changeAuth}/>
       <Footer />
     </div>
   );

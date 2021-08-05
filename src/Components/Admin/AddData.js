@@ -28,11 +28,16 @@ export function AddData(props) {
               setError( false)
             } )
             .catch((error) => {
+              console.log(error)
               setMessage('There has been an error!')
               setError(true)
             })
         })
-        .catch((error) => console.log(error))
+        .catch((error) => {
+          console.log(error)
+          setMessage(error)
+          setError(true)
+        })
     }
     else {
       console.log('need image')
@@ -87,7 +92,7 @@ export function AddData(props) {
         <button type="submit" className="btn btn-primary">Add Book</button>
       </div>
       <div className="my-2">
-        <Feedback duration={3000} content={message} />
+        <Feedback duration={5000} content={message} />
       </div>
     </form>
   )

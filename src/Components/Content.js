@@ -28,6 +28,7 @@ export function Content(props) {
     if (!bookData) {
       readData()
     }
+
   }, [bookData])
 
   const db = firebase.firestore()
@@ -87,8 +88,6 @@ export function Content(props) {
   const registerUser = (email, password) => {
     firebase.auth().createUserWithEmailAndPassword(email, password)
       .then((userCredential) => {
-        // do something with the user object
-        //console.log( userCredential.user.uid )
         setUser(userCredential.user)
         setAuth(true)
         props.authHandler(true)
@@ -126,7 +125,7 @@ export function Content(props) {
     <div className="container">
       <Switch>
         <Route exact path="/">
-          <Home data={bookData} />
+          <Home data={bookData} auth={auth}/>
         </Route>
         <Route path="/about">
           <About />
@@ -144,7 +143,7 @@ export function Content(props) {
           <AddData handler={addData} imageHandler={addImage} />
         </Route>
         <Route path="/book/:bookId">
-          <Detail handler={getDetail}/>
+          <Detail handler={getDetail} auth={auth}/>
         </Route>
       </Switch>
     </div>

@@ -38,6 +38,7 @@ export function Home ( props ) {
               style={{top:0,left:0,bottom:0,right:0}} 
               to={"/book/" + item.id} 
             />
+              
           </div>
         </div>
       )

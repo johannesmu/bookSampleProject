@@ -1,4 +1,7 @@
+import { useHistory } from "react-router"
+
 export function Login ( props ) {
+  const history = useHistory()
 
   const submitHandler = ( event ) => {
     event.preventDefault()
