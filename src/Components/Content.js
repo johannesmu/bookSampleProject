@@ -82,6 +82,14 @@ export function Content(props) {
     })
   }
 
+  const addReview = ( data ) => {
+    return new Promise( (resolve,reject) => {
+      db.collection('reviews').add( data )
+      .then( () => resolve(true))
+      .catch( error => reject(error) )
+    })
+  }
+
   const storage = firebase.storage()
 
   // example path 'books/covers/image1.jpg'
@@ -158,7 +166,7 @@ export function Content(props) {
           <Logout handler={logoutUser} />
         </Route>
         <Route path="/book/:bookId">
-          <Detail handler={getDetail} auth={auth} />
+          <Detail handler={getDetail} auth={auth} reviewHandler={addReview} user={user}/>
         </Route>
         <Route path="/add">
           <AddData handler={addData} imageHandler={addImage} />

@@ -30,7 +30,14 @@ export function Detail(props) {
   const handleReview = ( event ) => {
     event.preventDefault()
     const data = new FormData( event.target )
-    console.log( data.get('stars') )
+    let review = {}
+    review.stars = data.get('stars')
+    review.comment = data.get('comment')
+    review.book = bookId
+    review.user = props.user.uid
+    props.reviewHandler( review )
+      .then( res => console.log(res) )
+      .catch( error => console.log(error) )
   }
 
   const addToFavourites = () => {
