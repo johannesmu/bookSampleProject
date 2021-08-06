@@ -11,6 +11,7 @@ import {About} from './About';
 import {Register} from './Register';
 import {Login} from './Login';
 import {Logout} from './Logout';
+import {Detail} from './Detail';
 import { AddData } from './Admin/AddData';
 
 export function Content( props ) {
@@ -55,6 +56,17 @@ export function Content( props ) {
         })
         resolve( books )
       })
+    })
+  }
+
+  const getDetail = ( id ) => {
+    console.log( id )
+    return new Promise( (resolve,reject) => {
+      db.collection('books').doc(id).get()
+      .then(( doc ) => {
+        resolve( doc.data() )
+      })
+      .catch((error) => reject(error) )
     })
   }
 
@@ -128,6 +140,9 @@ export function Content( props ) {
         </Route>
         <Route path="/logout">
           <Logout handler={ logoutUser }/>
+        </Route>
+        <Route path="/book/:bookId">
+          <Detail handler={getDetail} />
         </Route>
         <Route path="/add">
           <AddData handler={addData} imageHandler={addImage}/>
