@@ -1,15 +1,6 @@
 import { useState, useEffect } from "react"
 
-// props type= ['e' for error | 'w' for warning | 's' for success] -- String
-// props duration = miliseconds -- Number
-// props message = message to display -- String
-// props trigger = state hook to use to show the feedback -- Boolean
-// props reset = state hook function to change the value of trigger hook -- Function
-// usage 
-// const [display,setDisplay] = useState(false)
-// <Feedback message="Hello" type="s" duration={5000} trigger={display} reset={setDisplay} />
-// to show the message, change display to true
-// <button onClick={ () => setDisplay(true) }>Show</button>
+// see docs at bottom
 export function Feedback(props) {
 
   const [show, setShow] = useState(false)
@@ -67,3 +58,14 @@ export function Feedback(props) {
     return null;
   }
 }
+
+// props type= ['e' for error | 'w' for warning | 's' for success] -- String
+// props duration = miliseconds -- Number
+// props message = message to display -- String
+// props trigger = state hook to use to show the feedback -- Boolean
+// props reset = state hook function to change the value of trigger hook -- Function
+// usage 
+// const [display,setDisplay] = useState(false)
+// <Feedback message="Hello" type="s" duration={5000} trigger={display} reset={setDisplay} />
+// to show the message, change display to true
+// <button onClick={ () => setDisplay(true) }>Show</button>
