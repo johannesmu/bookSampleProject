@@ -106,18 +106,18 @@ export function Content(props) {
   }
 
   const registerUser = (email, password) => {
-    firebase.auth().createUserWithEmailAndPassword(email, password)
+    return new Promise( (resolve, reject) => {
+      firebase.auth().createUserWithEmailAndPassword(email, password)
       .then((userCredential) => {
-        // do something with the user object
-        //console.log( userCredential.user.uid )
         setUser(userCredential.user)
         setAuth(true)
         props.authHandler(true)
+        resolve( true )
       })
       .catch((error) => {
-        // do something with the error
-        console.log(error)
+        reject( error )
       })
+    })
   }
 
   const loginUser = (email, password) => {
