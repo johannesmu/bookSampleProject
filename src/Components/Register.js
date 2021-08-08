@@ -1,4 +1,6 @@
 import { useState,useEffect } from "react"
+import {emailValidator, userNameValidator, passwordValidator} from './Validators'
+
 export function Register(props) {
   const [validUserName,setValidUserName] = useState()
   const [userNameErrors,setUserNameErrors] = useState([])
@@ -25,92 +27,37 @@ export function Register(props) {
 
   const validateUserName = (event) => {
     const name = event.target.value
-    
-    // store errors in an array to be shown to user
-    let errors = []
-    // check length of name
-    const len = name.length
-    if( len < 6 ) {
-      errors.push("minimum 6 characters")
-    }
-    // -- check if it contains invalid characters including space
-    // list of invalid characters
-    const invalidChars = '~!@#$%^&*()+=-`|\{}[]:;"?/><,. '.split('')
-    const chars = name.split('')
-    // count invalid characters found
-    let invalidCount = 0
-    chars.forEach( (chr) => {
-      if( invalidChars.includes(chr) ) { invalidCount++ }
-    })
-    if( invalidCount > 0 ) {
-      errors.push(`contains ${invalidCount} invalid ${ (invalidCount > 1) ? "characters" : "character"}`)
-    }
-    // -- check if all characters are numbers
-    if( Number(name) ) {
-      errors.push("cannot contain only numbers")
-    }
-    if( Number( name.charAt(0) )) {
-      errors.push("first character cannot be a number")
-    }
-    setUserNameErrors( errors.join(', ') )
-    if( errors.length === 0 ) {
-      setValidUserName( true )
-    }
-    else{
+    const validate = userNameValidator(name)
+    if( validate.valid === false ) {
+      setUserNameErrors( validate.errors.join(', ') )
       setValidUserName( false )
+    }
+    else {
+      setValidUserName( true )
     }
   }
 
   const validateEmail = ( event ) => {
     const email = event.target.value
-    // console.log(email.split('.'))
-    let errors = []
-    if( email.indexOf('@') === 0 ) {
-      errors.push('Need username before "@" symbol')
-    }
-    if( email.indexOf('@') === -1 ) {
-      errors.push('Need "@" symbol after username')
-    }
-    if( email.split('.').length < 2) {
-      errors.push('Need tld, eg .com')
-    }
-    setEmailErrors( errors.join(', ') )
-    if( errors.length === 0 ) {
-      setValidEmail( true )
-    }
-    else{
+    const validate = emailValidator(email)
+    if( validate.valid === false ) {
+      setEmailErrors( validate.errors.join(', ') )
       setValidEmail( false )
+    }
+    else {
+      setValidEmail( true )
     }
   }
 
   const validatePassword = ( event) => {
     const password = event.target.value
-    let errors = []
-    // -- check password length
-    if( password.length < 8 ) {
-      errors.push( 'Minimum length is 8 characters' )
-    }
-    // -- check if it contains capital
-    const caps = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
-    const chars = password.split('')
-    let capsCount = 0
-    let numCount = 0
-    chars.forEach( (chr) => {
-      if( caps.includes(chr) ) { capsCount++ }
-      if( parseInt(chr) ) { numCount++ }
-    })
-    if( capsCount === 0 ) {
-      errors.push('Need to contain a capital letter')
-    }
-    if( numCount === 0 ) {
-      errors.push('Need to contain a number')
-    }
-    setPasswordErrors( errors.join(', ') )
-    if( errors.length === 0 ) {
-      setValidPassword( true )
-    }
-    else{
+    const validate = passwordValidator( password )
+    if( validate.valid === false ) {
+      setPasswordErrors( validate.errors.join(', ') )
       setValidPassword( false )
+    }
+    else {
+      setValidPassword( true )
     }
   }
 

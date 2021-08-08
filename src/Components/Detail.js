@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router";
+import {Spinner} from './Spinner'
 
 export function Detail(props) {
   const [book, setBook] = useState()
@@ -7,10 +8,10 @@ export function Detail(props) {
 
   const { bookId } = useParams()
   const history = useHistory()
+  
 
   useEffect(() => {
     if (!book) {
-      console.log(bookId)
       props.handler(bookId)
         .then((bookData) => setBook(bookData))
         .catch((error) => console.log(error))
@@ -23,7 +24,7 @@ export function Detail(props) {
       setShowReview( true )
     }
     else {
-      history.push('/login')
+      history.push(`/login?returnPath=book/${bookId}`)
     }
   }
 
@@ -45,12 +46,12 @@ export function Detail(props) {
       console.log('can add favourite')
     }
     else {
-      history.push('/login')
+      history.push('/login/'+bookId)
     }
   }
 
   if (!book) {
-    return <h3>Loading book...</h3>
+    return <Spinner size={64}/>
   }
   else {
     return (

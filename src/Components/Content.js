@@ -72,7 +72,6 @@ export function Content(props) {
   }
 
   const getDetail = (id) => {
-    console.log(id)
     return new Promise((resolve, reject) => {
       db.collection('books').doc(id).get()
         .then((doc) => {
@@ -87,6 +86,14 @@ export function Content(props) {
       db.collection('reviews').add( data )
       .then( () => resolve(true))
       .catch( error => reject(error) )
+    })
+  }
+
+  const checkUserName = ( name ) => {
+    return new Promise( (resolve,reject) => {
+      db.collection('users').where('username', '==', name )
+      .then( (res) => resolve(res.data()) )
+      .catch( (error) => reject(error) )
     })
   }
 
@@ -138,13 +145,17 @@ export function Content(props) {
   }
 
   const logoutUser = () => {
-    firebase.auth().signOut()
+    return new Promise( (resolve,reject) => {
+      firebase.auth().signOut()
       .then(() => {
         // do something after signout
         setUser(null)
         setAuth(false)
         props.authHandler(false)
+        resolve( true )
       })
+      .catch((error) => reject(false) )
+    })
   }
 
   return (
@@ -157,7 +168,7 @@ export function Content(props) {
           <About />
         </Route>
         <Route path="/register">
-          <Register handler={registerUser} />
+          <Register handler={registerUser} check={checkUserName}/>
         </Route>
         <Route path="/login">
           <Login handler={loginUser} />

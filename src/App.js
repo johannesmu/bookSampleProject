@@ -16,7 +16,7 @@ const Nav = [
 const AuthNav = [
   {name: "Home", link: "/"},
   {name: "About", link: "/about"},
-  {name: "Log out", link: "/logout"},
+  {name: "Log out", link:  "/logout" },
 ]
 
 function App() {
@@ -24,7 +24,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header name="Heart Books" navigation={ (auth) ? AuthNav : Nav } />
+      <Header name="Heart Books" navigation={ (auth) ? AuthNav : Nav } auth={auth} />
       <Content authHandler = {setAuth}/>
       <Footer />
     </div>
