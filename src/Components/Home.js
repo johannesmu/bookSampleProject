@@ -19,8 +19,8 @@ export function Home ( props ) {
   else {
     const Books = data.map( (item, key) => {
       return(
-        <div className="col-md-3 my-2" key={key}>
-          <div className="card position-relative">
+        <div className="col-sm-6 col-lg-3 my-2" key={key}>
+          <div className="card position-relative" style={{minHeight:'100%'}}>
             <Link 
             className="position-absolute" 
             to={"book/" + item.id } 
@@ -29,7 +29,7 @@ export function Home ( props ) {
             src={item.cover_image} 
             className="card-img-top border border-primary" 
             alt={item.title} 
-            style={{width: '100%', height: '300px', objectFit: 'cover', objectPosition: 'center'}}
+            style={{maxWidth: '100%', aspectRatio:'3/4', objectFit: 'cover', objectPosition: 'center'}}
             />
             <div className="card-body">
               <h5 className="card-title">{item.title}</h5>
@@ -43,7 +43,7 @@ export function Home ( props ) {
     return(
       <div className="home">
         <h2>Books</h2>
-        <div className="row">
+        <div className="row align-items-stretch">
         { Books }
         </div>
       </div>

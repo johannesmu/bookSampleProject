@@ -1,7 +1,17 @@
 import { useState,useEffect } from "react"
+import {Link} from 'react-router-dom'
+import { useHistory,useLocation } from "react-router"
 import {emailValidator, userNameValidator, passwordValidator} from './Validators'
 
+const useQuery = () => {
+  return new URLSearchParams( useLocation().search )
+}
+
 export function Register(props) {
+  const history = useHistory()
+  const query = useQuery()
+
+  const [returnPath,setReturnPath] = useState()
   const [validUserName,setValidUserName] = useState()
   const [userNameErrors,setUserNameErrors] = useState([])
   const [validEmail,setValidEmail] = useState()
@@ -115,6 +125,9 @@ export function Register(props) {
           >
             Register
           </button>
+        </div>
+        <div className="my-4 text-center">
+          <Link to="login">Already have an account? Sign in here</Link>
         </div>
       </form>
     </div>

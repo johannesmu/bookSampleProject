@@ -19,6 +19,9 @@ export function Feedback(props) {
       case "w":
         setType("warning");
         break;
+      case "i":
+        setType("info");
+        break;
       default:
         setType("success");
         break;
@@ -59,7 +62,7 @@ export function Feedback(props) {
   }
 }
 
-// props type= ['e' for error | 'w' for warning | 's' for success] -- String
+// props type= ['e' for error | 'w' for warning | 's' for success | 'i' for info] -- String
 // props duration = miliseconds -- Number
 // props message = message to display -- String
 // props trigger = state hook to use to show the feedback -- Boolean

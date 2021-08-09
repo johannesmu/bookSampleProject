@@ -24,7 +24,7 @@ export function Detail(props) {
       setShowReview( true )
     }
     else {
-      history.push(`/login?returnPath=book/${bookId}`)
+      history.push(`/login?returnPath=book/${bookId}&msg=${escape("Log in to review "+book.title)}`)
     }
   }
 
@@ -57,7 +57,7 @@ export function Detail(props) {
     return (
       <div className="row mt-4">
         <div className="col-md-6">
-          <img className="img-fluid" src={book.cover_image} />
+          <img className="img-fluid" src={book.cover_image} alt={book.title + " cover"}/>
         </div>
         <div className="col-md-6">
           <h3>{book.title}</h3>

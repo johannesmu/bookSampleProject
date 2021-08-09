@@ -12,7 +12,7 @@ export function Logout ( props ) {
     }
     props.handler().then( () => history.push(redirect) ).catch( (error) => console.log(error) )
     
-  },[redirect])
+  },[ props, history, redirect])
 
   return(
     <Spinner size={64} />

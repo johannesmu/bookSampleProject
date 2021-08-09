@@ -43,7 +43,7 @@ export function Content(props) {
         props.authHandler(false)
       }
     })
-  }, [bookData])
+  })
 
   const db = firebase.firestore()
 
