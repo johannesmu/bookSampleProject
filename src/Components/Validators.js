@@ -58,8 +58,8 @@ export function userNameValidator(name) {
     errors.push("minimum 6 characters")
   }
   // -- check if it contains invalid characters including space
-  // list of invalid characters
-  const invalidChars = '~!@#$%^&*()+=-`|\{}[]:;"?/><,. '.split('')
+  // list of invalid characters (" and \) have to be escaped
+  const invalidChars = "~!@#$%^&*()+=-`|{}[]:;\"'\\?/><,. ".split('')
   const chars = name.split('')
   // count invalid characters found
   let invalidCount = 0
