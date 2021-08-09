@@ -1,6 +1,3 @@
-export function test(val) {
-  return "hello " + val
-}
 
 export function emailValidator(email) {
   let errors = []
