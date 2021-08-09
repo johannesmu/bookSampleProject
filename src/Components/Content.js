@@ -27,7 +27,6 @@ export function Content(props) {
     if (!bookData) {
       readData()
         .then((data) => {
-          console.log(data)
           setBookData(data)
         })
         .catch((error) => console.log(error))
