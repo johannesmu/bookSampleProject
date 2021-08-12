@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router";
 import {Spinner} from './Spinner'
+import {Reviews} from './Reviews'
 
 export function Detail(props) {
   const [book, setBook] = useState()
   const [showReview, setShowReview] = useState(false)
+  // disable review button if user has reviewed the book
+  const [disableReview, setDisableReview] = useState( false )
 
   const { bookId } = useParams()
   const history = useHistory()
@@ -24,6 +27,8 @@ export function Detail(props) {
       setShowReview( true )
     }
     else {
+      // if user is not logged in take them to login page and set this page as a return path,
+      // so user can be taken back here after login/ register
       history.push(`/login?returnPath=book/${bookId}&msg=${escape("Log in to review "+book.title)}`)
     }
   }
@@ -95,10 +100,13 @@ export function Detail(props) {
               </select>
               <label>Say something about the book (no spoilers!)</label>
               <textarea name="comment" cols="30" rows="3" className="form-control" placeholder="I love this book..."></textarea>
+              <input type="hidden" name="bookId" value={bookId} />
               <button type="submit" className="btn btn-success mt-2">Save</button>
             </form>
           </div>
+          <Reviews />
         </div>
+        
       </div>
     )
   }
