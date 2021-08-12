@@ -31,9 +31,9 @@ export function Home ( props ) {
             alt={item.title} 
             style={{maxWidth: '100%', aspectRatio:'3/4', objectFit: 'cover', objectPosition: 'center'}}
             />
-            <div className="card-body">
+            <div className="card-body d-flex flex-column">
               <h5 className="card-title">{item.title}</h5>
-              <p style={{minHeight: '5ch'}}>{item.tagline}</p>
+              <p className="flex-fill" style={{minHeight: '5ch'}}>{item.tagline}</p>
               <p>by {item.author}</p>
             </div>
           </div>
