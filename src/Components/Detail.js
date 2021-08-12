@@ -99,7 +99,7 @@ export function Detail(props) {
                 <option value="5">5 stars</option>
               </select>
               <label>Say something about the book (no spoilers!)</label>
-              <textarea name="comment" cols="30" rows="3" className="form-control" placeholder="I love this book..."></textarea>
+              <textarea name="comment" cols="30" rows="3" className="form-control" placeholder="I love this book, because it makes me think of cheese..."></textarea>
               <input type="hidden" name="bookId" value={bookId} />
               <button type="submit" className="btn btn-success mt-2">Save</button>
             </form>
