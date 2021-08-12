@@ -82,19 +82,43 @@ export function Content(props) {
 
   const addReview = ( data ) => {
     return new Promise( (resolve,reject) => {
+      console.log( data )
+      // create a ref for book being reviewed
       db.collection('reviews').add( data )
-      .then( () => resolve(true))
+      .then( (docRef) => {
+        const ref = db.doc(docRef.path)
+        const reviewRef = { path: ref }
+        // add ref to users
+        db.collection('users').doc(data.userId).collection('reviews').add(reviewRef)
+        .then( () => {
+          resolve(true)
+        })
+        .catch( (error) => reject(error) )
+      })
       .catch( error => reject(error) )
     })
   }
 
-  const checkUserName = ( name ) => {
+  // get reviews for a book
+  const getBookReviews = ( bookId ) => {
     return new Promise( (resolve,reject) => {
-      db.collection('users').where('username', '==', name )
-      .then( (res) => resolve(res.data()) )
-      .catch( (error) => reject(error) )
+      db.collection('reviews').where('bookId', "==", bookId ).get()
+      .then( (res) => {
+        let reviews = []
+        res.forEach( (doc) => {
+          let review = doc.data()
+          reviews.push( review )
+        })
+        resolve( reviews )
+      })
+      .catch( (error) => {
+        reject( error )
+      })
     })
   }
+  // add book to user's favourites
+  const addToFavourites = ( ) => {}
+  
 
   const storage = firebase.storage()
 
@@ -111,14 +135,22 @@ export function Content(props) {
     })
   }
 
-  const registerUser = (email, password) => {
+  const registerUser = (username, email, password) => {
     return new Promise( (resolve, reject) => {
       firebase.auth().createUserWithEmailAndPassword(email, password)
       .then((userCredential) => {
-        setUser(userCredential.user)
-        setAuth(true)
-        props.authHandler(true)
-        resolve( true )
+        // set user's username
+        userCredential.user.updateProfile({displayName: username})
+        // add user in the database
+        const userData = {name: username, email: email, created: new Date() }
+        db.collection('users').doc(userCredential.user.uid).set(userData)
+        .then( (res) => {
+          console.log( res)
+          setUser(userCredential.user)
+          setAuth(true)
+          props.authHandler(true)
+          resolve( true )
+        })
       })
       .catch((error) => {
         reject( error )
@@ -167,7 +199,7 @@ export function Content(props) {
           <About />
         </Route>
         <Route path="/register">
-          <Register handler={registerUser} check={checkUserName}/>
+          <Register handler={registerUser} />
         </Route>
         <Route path="/login">
           <Login handler={loginUser} />
@@ -176,7 +208,13 @@ export function Content(props) {
           <Logout handler={logoutUser} />
         </Route>
         <Route path="/book/:bookId">
-          <Detail handler={getDetail} auth={auth} reviewHandler={addReview} user={user}/>
+          <Detail 
+          handler={getDetail} 
+          auth={auth} 
+          reviewHandler={addReview} 
+          user={user}
+          getReviews={getBookReviews}
+          />
         </Route>
         <Route path="/add">
           <AddData handler={addData} imageHandler={addImage} />
