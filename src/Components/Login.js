@@ -137,7 +137,7 @@ export function Login ( props ) {
             Don't have an account? Sign up here
           </Link>
         </div>
-        <Feedback type="i" duration={5000} message={message} trigger={show} reset={setShow} />
+        {/* <Feedback type="i" duration={5000} message={message} trigger={show} reset={setShow} /> */}
       </form>
     </div>
   )

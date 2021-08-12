@@ -117,7 +117,18 @@ export function Content(props) {
     })
   }
   // add book to user's favourites
-  const addToFavourites = ( ) => {}
+  const addToFavourites = ( bookId, title, userId ) => {
+    return new Promise( (resolve,reject) => {
+      // create a reference to book
+      const ref = db.collection('books').doc(bookId)
+      const bookData = {id: bookId, title: title, bookRef :ref }
+      // store it in users favourites
+      db.collection('users').doc(userId)
+        .collection('favourites').add({ bookData })
+        .then( () => resolve(true) )
+        .catch( () => reject(false) )
+    })
+  }
   
 
   const storage = firebase.storage()
@@ -214,6 +225,7 @@ export function Content(props) {
           reviewHandler={addReview} 
           user={user}
           getReviews={getBookReviews}
+          favourites={addToFavourites}
           />
         </Route>
         <Route path="/add">

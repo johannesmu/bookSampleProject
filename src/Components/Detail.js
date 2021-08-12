@@ -5,10 +5,13 @@ import {Reviews} from './Reviews'
 
 export function Detail(props) {
   const [book, setBook] = useState()
+  const [favourites,setFavourites] = useState()
   const [showReview, setShowReview] = useState(false)
   const [bookReviews,setBookReviews] = useState()
   // disable review button if user has reviewed the book
   const [disableReview, setDisableReview] = useState( false )
+  // disable favourite button if user has added the book
+  const [disableFavs,setDisableFavs] = useState(false)
 
 
   const { bookId } = useParams()
@@ -28,16 +31,18 @@ export function Detail(props) {
       })
       .catch( (error) => console.log(error) )
     }
+    // get favourites here
   })
 
   useEffect( () => {
-    if( bookReviews ) {
+    if( bookReviews && props.user ) {
       bookReviews.forEach( (review) => {
         if( review.userId == props.user.uid ) {
           setDisableReview( true )
         }
       })
     }
+    // check if user has this book in favourites, disable fav button if yes
   }, [bookReviews])
 
 
@@ -68,10 +73,16 @@ export function Detail(props) {
 
   const addToFavourites = () => {
     if( props.auth === true ) {
-      console.log('can add favourite')
+      props.favourites(bookId,book.title, props.user.uid)
+      .then( (result) => {
+        console.log(result)
+      })
+      .catch( (error) => console.log(error) )
     }
     else {
-      history.push('/login/'+bookId)
+      // if user is not logged in take them to login page and set this page as a return path,
+      // so user can be taken back here after login/ register
+      history.push(`/login?returnPath=book/${bookId}&msg=${escape("Log in to add "+book.title+" to favourites")}`)
     }
   }
 
@@ -122,8 +133,8 @@ export function Detail(props) {
               <label>Say something about the book (no spoilers!)</label>
               <textarea name="comment" cols="30" rows="3" className="form-control" placeholder="I love this book, because it makes me think of cheese..."></textarea>
               <input type="hidden" name="bookId" value={bookId} />
-              <input type="hidden" name="userId" value={props.user.uid} />
-              <input type="hidden" name="userName" value={props.user.displayName} />
+              <input type="hidden" name="userId" value={(props.user) ? props.user.uid: ""} />
+              <input type="hidden" name="userName" value={(props.user) ? props.user.displayName : ""} />
               <button type="submit" className="btn btn-success mt-2">Save</button>
             </form>
           </div>
