@@ -38,7 +38,7 @@ export function Login ( props ) {
     else{
       setMessage(null)
     }
-  }, [returnPath] )
+  }, [query] )
 
   useEffect( () => {
     if( validEmail && validPassword ) {
