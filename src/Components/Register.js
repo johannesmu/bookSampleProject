@@ -1,81 +1,98 @@
-import { useState,useEffect } from "react"
-import {Link} from 'react-router-dom'
-import { useHistory,useLocation } from "react-router"
-import {emailValidator, userNameValidator, passwordValidator} from './Validators'
+import { useState, useEffect } from "react"
+import { Link } from 'react-router-dom'
+import { useHistory, useLocation } from "react-router"
+import { emailValidator, userNameValidator, passwordValidator } from './Validators'
 
 const useQuery = () => {
-  return new URLSearchParams( useLocation().search )
+  return new URLSearchParams(useLocation().search)
 }
 
 export function Register(props) {
+
   const history = useHistory()
   const query = useQuery()
 
-  const [returnPath,setReturnPath] = useState()
-  const [validUserName,setValidUserName] = useState()
-  const [userNameErrors,setUserNameErrors] = useState([])
-  const [validEmail,setValidEmail] = useState()
-  const [emailErrors,setEmailErrors] = useState([])
-  const [validPassword,setValidPassword] = useState()
-  const [passwordErrors,setPasswordErrors] = useState([])
-  const [validForm,setValidForm] = useState(false)
+  const [returnPath, setReturnPath] = useState()
+  const [validUserName, setValidUserName] = useState()
+  const [userNameErrors, setUserNameErrors] = useState([])
+  const [validEmail, setValidEmail] = useState()
+  const [emailErrors, setEmailErrors] = useState([])
+  const [validPassword, setValidPassword] = useState()
+  const [passwordErrors, setPasswordErrors] = useState([])
+  const [validForm, setValidForm] = useState(false)
 
-  useEffect( () => {
-    if( validUserName && validEmail && validPassword ) {
-      setValidForm( true )
+  useEffect(() => {
+    const path = query.get('returnPath')
+    if (path !== undefined) {
+      setReturnPath(path)
+    }
+  },[ query ])
+
+  useEffect(() => {
+    if (validUserName && validEmail && validPassword) {
+      setValidForm(true)
     }
     else {
-      setValidForm( false )
+      setValidForm(false)
     }
-  },[validUserName,validEmail,validPassword])
+  }, [validUserName, validEmail, validPassword])
 
   const submitHandler = (event) => {
     event.preventDefault()
     const data = new FormData(event.target)
-    props.handler(data.get('email'), data.get('password'))
+    props.handler(data.get('username'), data.get('email'), data.get('password'))
+      .then((response) => {
+        if (response) {
+          history.push((returnPath) ? '/' + returnPath : '/')
+        }
+      })
+      .catch((error) => {
+        console.error();
+      })
   }
 
   const validateUserName = (event) => {
     const name = event.target.value
     const validate = userNameValidator(name)
-    if( validate.valid === false ) {
-      setUserNameErrors( validate.errors.join(', ') )
-      setValidUserName( false )
+    if (validate.valid === false) {
+      setUserNameErrors(validate.errors.join(', '))
+      setValidUserName(false)
     }
     else {
-      setValidUserName( true )
+      setValidUserName(true)
     }
+         
   }
 
-  const validateEmail = ( event ) => {
+  const validateEmail = (event) => {
     const email = event.target.value
     const validate = emailValidator(email)
-    if( validate.valid === false ) {
-      setEmailErrors( validate.errors.join(', ') )
-      setValidEmail( false )
+    if (validate.valid === false) {
+      setEmailErrors(validate.errors.join(', '))
+      setValidEmail(false)
     }
     else {
-      setValidEmail( true )
+      setValidEmail(true)
     }
   }
 
-  const validatePassword = ( event) => {
+  const validatePassword = (event) => {
     const password = event.target.value
-    const validate = passwordValidator( password )
-    if( validate.valid === false ) {
-      setPasswordErrors( validate.errors.join(', ') )
-      setValidPassword( false )
+    const validate = passwordValidator(password)
+    if (validate.valid === false) {
+      setPasswordErrors(validate.errors.join(', '))
+      setValidPassword(false)
     }
     else {
-      setValidPassword( true )
+      setValidPassword(true)
     }
   }
 
-  const validationClass = ( mainClass, validState) => {
-    if( validState === true ) {
+  const validationClass = (mainClass, validState) => {
+    if (validState === true) {
       return `${mainClass}  is-valid`
     }
-    else if( validState === false ) {
+    else if (validState === false) {
       return `${mainClass}  is-invalid`
     }
     else {
@@ -88,40 +105,40 @@ export function Register(props) {
       <form className="col-md-6 offset-md-3 col-lg-4 offset-lg-4" id="register" onSubmit={submitHandler}>
         <h4>Register for an account</h4>
         <label className="form-label" htmlFor="username">Username</label>
-        <input 
-          className={validationClass("form-control",validUserName)}
-          type="text" 
-          name="username" 
-          id="username" 
-          onChange={validateUserName} 
-          placeholder="letters and numbers no spaces" 
+        <input
+          className={validationClass("form-control", validUserName)}
+          type="text"
+          name="username"
+          id="username"
+          onChange={validateUserName}
+          placeholder="letters and numbers no spaces"
         />
         <div className="invalid-feedback">{userNameErrors}</div>
         <label className="form-label" htmlFor="email">Email</label>
-        <input 
-          className={validationClass("form-control",validEmail)} 
-          type="email" 
-          name="email" 
-          id="email" 
+        <input
+          className={validationClass("form-control", validEmail)}
+          type="email"
+          name="email"
+          id="email"
           onChange={validateEmail}
-          placeholder="me@example.com" 
+          placeholder="me@example.com"
         />
         <div className="invalid-feedback">{emailErrors}</div>
         <label className="form-label" htmlFor="password">Password</label>
-        <input 
-          className={validationClass("form-control",validPassword)} 
-          type="password" 
-          name="password" 
-          id="password" 
-          placeholder="minimum 8 characters" 
+        <input
+          className={validationClass("form-control", validPassword)}
+          type="password"
+          name="password"
+          id="password"
+          placeholder="minimum 8 characters"
           onChange={validatePassword}
         />
         <div className="invalid-feedback">{passwordErrors}</div>
         <div className="d-flex justify-content-center mt-3">
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="btn btn-primary flex-fill"
-            disabled = { (!validForm) ? true : false }
+            disabled={(!validForm) ? true : false}
           >
             Register
           </button>
