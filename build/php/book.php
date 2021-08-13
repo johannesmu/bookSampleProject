@@ -23,7 +23,7 @@ $books = new Books();
 $books_results = $books -> getBooks();
 
 header("Access-Control-Allow-Origin: *");
-header('Content-Type: application/json');
+header("Content-Type: application/json");
 
 $response = array();
 $response['count'] = count( $books_results);
