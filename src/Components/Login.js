@@ -3,7 +3,6 @@ import { useHistory, useLocation } from "react-router"
 import {Link} from 'react-router-dom'
 
 import { emailValidator} from "./Validators"
-import {Feedback} from './Feedback'
 
 // custom hook to access URL parameters such as login?returnPath=book/abcd
 // so we can return the user to the book they wanted to review
@@ -137,7 +136,6 @@ export function Login ( props ) {
             Don't have an account? Sign up here
           </Link>
         </div>
-        {/* <Feedback type="i" duration={5000} message={message} trigger={show} reset={setShow} /> */}
       </form>
     </div>
   )
