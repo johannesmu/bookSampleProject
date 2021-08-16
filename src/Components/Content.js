@@ -12,7 +12,9 @@ import { Register } from './Register';
 import { Login } from './Login';
 import { Logout } from './Logout';
 import { Detail } from './Detail';
+import { Favourites } from './Favourites'
 import { AddData } from './Admin/AddData';
+
 
 export function Content(props) {
   const [auth, setAuth] = useState(false)
@@ -124,9 +126,27 @@ export function Content(props) {
       const bookData = {id: bookId, title: title, bookRef :ref }
       // store it in users favourites
       db.collection('users').doc(userId)
-        .collection('favourites').add({ bookData })
+        .collection('favourites').add( bookData)
         .then( () => resolve(true) )
         .catch( () => reject(false) )
+    })
+  }
+
+  const getUserFavourites = ( userId ) => {
+    return new Promise( (resolve,reject) => {
+      const ref = db.collection('users').doc(userId).collection('favourites')
+      ref.get()
+      .then( (result) => {
+        let favourites = []
+        result.forEach( (item) => {
+          let fav = item.data()
+          console.log( fav )
+          fav.id = item.id
+          favourites.push( fav )
+        })
+        resolve( favourites )
+      })
+      .catch( (error) => reject(error) )
     })
   }
   
@@ -230,6 +250,9 @@ export function Content(props) {
         </Route>
         <Route path="/add">
           <AddData handler={addData} imageHandler={addImage} />
+        </Route>
+        <Route path="/favourites">
+          <Favourites get={getUserFavourites} user={user} />
         </Route>
       </Switch>
     </div>

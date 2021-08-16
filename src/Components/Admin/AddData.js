@@ -7,7 +7,7 @@ export function AddData(props) {
   const submitHandler = (event) => {
     event.preventDefault()
     const formData = new FormData(event.target)
-    event.target.reset()
+    // event.target.reset()
     const obj = new Object()
     formData.forEach((value, key) => {
       obj[key] = value
@@ -26,8 +26,10 @@ export function AddData(props) {
             .then((response) => {
               setMessage('The book has been added!')
               setError( false)
+              event.target.reset()
             } )
             .catch((error) => {
+              console.log(error)
               setMessage('There has been an error!')
               setError(true)
             })

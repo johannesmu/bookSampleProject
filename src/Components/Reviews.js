@@ -9,7 +9,8 @@ export function Reviews(props) {
 
 
 
-  if (reviews.length > 0) {
+  if (reviews) {
+    console.log(reviews)
     const ReviewItems = reviews.map((item, key) => {
       return (
         <div className="review card my-2" key={key}>
@@ -30,7 +31,7 @@ export function Reviews(props) {
   else {
     return (
       <div className="reviews mt-4">
-        <h5>Reviews ({reviews.length})</h5>
+        <h5>Reviews (0)</h5>
         <p>No reviews yet. Be the first to review this book!</p>
       </div>
     )

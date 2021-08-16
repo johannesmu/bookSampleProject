@@ -25,11 +25,7 @@ export function Detail(props) {
         .catch((error) => console.log(error))
     }
     if( !bookReviews ) {
-      props.getReviews( bookId )
-      .then( (result) => {
-        setBookReviews( result )
-      })
-      .catch( (error) => console.log(error) )
+      getReviews()
     }
     // get favourites here
   })
@@ -45,10 +41,17 @@ export function Detail(props) {
     // check if user has this book in favourites, disable fav button if yes
   }, [bookReviews])
 
+  const getReviews = () => {
+    props.getReviews( bookId )
+      .then( (result) => {
+        console.log( ...result )
+        setBookReviews( result )
+      })
+      .catch( (error) => console.log(error) )
+  }
 
   const addReview = () => {
     if( props.auth === true ) {
-      // console.log('can write review')
       setShowReview( true )
     }
     else {
@@ -67,6 +70,7 @@ export function Detail(props) {
       .then( () => {
         setDisableReview(true)
         setShowReview(false)
+        getReviews()
       } )
       .catch( error => console.log(error) )
   }
